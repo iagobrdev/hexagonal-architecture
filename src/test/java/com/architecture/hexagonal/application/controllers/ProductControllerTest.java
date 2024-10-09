@@ -1,6 +1,7 @@
 package com.architecture.hexagonal.application.controllers;
 
 import com.architecture.hexagonal.domain.Product;
+import com.architecture.hexagonal.domain.interfaces.ProductRepository;
 import com.architecture.hexagonal.domain.services.ProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,9 +31,12 @@ class ProductControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ProductServiceImpl productService;
+    private ProductRepository productRepository;
 
     @InjectMocks
+    private ProductServiceImpl productService;
+
+    @Autowired
     private ProductController productController;
 
     @BeforeEach
@@ -44,7 +48,7 @@ class ProductControllerTest {
     void testCreateProduct() throws Exception {
         var createdProduct = new Product(1L, "New Product", BigDecimal.valueOf(100.0));
 
-        when(productService.createProduct(any(Product.class))).thenReturn(createdProduct);
+        when(productRepository.saveProduct(any(Product.class))).thenReturn(createdProduct);
 
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -57,7 +61,7 @@ class ProductControllerTest {
     void testGetProductById() throws Exception {
         var product = new Product(1L, "Test Product", BigDecimal.valueOf(50.0));
 
-        when(productService.findById(1L)).thenReturn(Optional.of(product));
+        when(productRepository.findProductById(1L)).thenReturn(Optional.of(product));
 
         mockMvc.perform(get("/products/1"))
                 .andExpect(status().isOk())
@@ -69,7 +73,7 @@ class ProductControllerTest {
         var product1 = new Product(1L, "Product 1", BigDecimal.valueOf(30.0));
         var product2 = new Product(2L, "Product 2", BigDecimal.valueOf(40.0));
 
-        when(productService.getAllProducts()).thenReturn(Arrays.asList(product1, product2));
+        when(productRepository.findAllProducts()).thenReturn(Arrays.asList(product1, product2));
 
         mockMvc.perform(get("/products"))
                 .andExpect(status().isOk())

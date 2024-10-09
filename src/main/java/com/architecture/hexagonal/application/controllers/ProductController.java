@@ -2,7 +2,6 @@ package com.architecture.hexagonal.application.controllers;
 
 import com.architecture.hexagonal.domain.Product;
 import com.architecture.hexagonal.domain.interfaces.ProductService;
-import com.architecture.hexagonal.domain.services.ProductServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +15,7 @@ import java.util.List;
 /**
  * REST controller for managing products.
  * This controller exposes endpoints to create, retrieve, and list products.
- * It delegates the business logic to the {@link ProductServiceImpl}.
+ * It delegates the business logic to the {@link ProductService}.
  */
 @RestController
 @RequestMapping("/products")
@@ -53,8 +52,8 @@ public class ProductController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        var product = productService.findById(id);
-        return product.map(ResponseEntity::ok)
+        return productService.findById(id)
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
