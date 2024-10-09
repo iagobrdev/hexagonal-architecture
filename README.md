@@ -12,16 +12,19 @@ A aplicação está organizada da seguinte maneira:
   /main
     /java
       /com/architecture/hexagonal
-        /application        # Camada de aplicação, contém a lógica de negócios e serviços
-        /domain             # Camada de domínio, contém entidades e interfaces que definem o comportamento
-        /infrastructure     # Camada de infraestrutura, implementações concretas, persistência e adaptadores externos
-          /config           # Configuração do ModelMapper e outras configurações
-          /controllers      # Controladores REST que expõem os endpoints da API
-          /entities         # Entidades JPA que mapeiam para as tabelas do banco de dados
-          /repository       # Repositórios JPA que fazem o acesso à base de dados
+        /application        
+            /controllers    # Contém os controladores REST responsáveis por expor os endpoints da API
+        /domain             
+            /interfaces      # Define as interfaces que representam abstrações do domínio, como repositórios e serviços
+            /services        # Implementações de serviços contendo a lógica de negócios da aplicação
+        /infrastructure     
+          /config           # Configurações de beans e outras configurações de infraestrutura do Spring
+          /entities         # Entidades JPA que mapeiam as tabelas do banco de dados
+          /repository       # Repositórios JPA que interagem com o banco de dados e fazem persistência
     /resources
       /db/migration         # Scripts do Flyway para criar e migrar o banco de dados
       application.properties # Configurações da aplicação
+
 ```
 
 ### Principais Tecnologias Utilizadas
