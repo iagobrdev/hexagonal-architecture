@@ -1,6 +1,7 @@
 package com.architecture.hexagonal.infrastructure.controllers;
 
-import com.architecture.hexagonal.application.ProductServiceImpl;
+import com.architecture.hexagonal.application.controllers.ProductController;
+import com.architecture.hexagonal.domain.services.ProductServiceImpl;
 import com.architecture.hexagonal.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

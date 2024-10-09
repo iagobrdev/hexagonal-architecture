@@ -1,6 +1,7 @@
 package com.architecture.hexagonal.application;
 
 import com.architecture.hexagonal.domain.Product;
+import com.architecture.hexagonal.domain.services.ProductServiceImpl;
 import com.architecture.hexagonal.infrastructure.entities.ProductEntity;
 import com.architecture.hexagonal.infrastructure.repository.JpaProductRepository;
 import org.junit.jupiter.api.BeforeEach;

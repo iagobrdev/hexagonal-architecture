@@ -1,7 +1,8 @@
-package com.architecture.hexagonal.infrastructure.controllers;
+package com.architecture.hexagonal.application.controllers;
 
-import com.architecture.hexagonal.application.ProductServiceImpl;
 import com.architecture.hexagonal.domain.Product;
+import com.architecture.hexagonal.domain.interfaces.ProductService;
+import com.architecture.hexagonal.domain.services.ProductServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,14 +22,14 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
-    private final ProductServiceImpl productService;
+    private final ProductService productService;
 
     /**
-     * Constructor to initialize the ProductController with the ProductServiceImpl.
+     * Constructor to initialize the ProductController with the ProductService.
      *
      * @param productService the service responsible for managing products.
      */
-    public ProductController(ProductServiceImpl productService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
