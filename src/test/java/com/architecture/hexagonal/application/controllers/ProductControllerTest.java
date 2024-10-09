@@ -1,8 +1,7 @@
-package com.architecture.hexagonal.infrastructure.controllers;
+package com.architecture.hexagonal.application.controllers;
 
-import com.architecture.hexagonal.application.controllers.ProductController;
-import com.architecture.hexagonal.domain.services.ProductServiceImpl;
 import com.architecture.hexagonal.domain.Product;
+import com.architecture.hexagonal.domain.services.ProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

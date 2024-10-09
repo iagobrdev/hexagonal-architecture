@@ -1,9 +1,8 @@
-package com.architecture.hexagonal.application;
+package com.architecture.hexagonal.infrastructure.services;
 
 import com.architecture.hexagonal.domain.Product;
+import com.architecture.hexagonal.domain.interfaces.ProductRepository;
 import com.architecture.hexagonal.domain.services.ProductServiceImpl;
-import com.architecture.hexagonal.infrastructure.entities.ProductEntity;
-import com.architecture.hexagonal.infrastructure.repository.JpaProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,7 +24,7 @@ import static org.mockito.Mockito.when;
 class ProductServiceImplTest {
 
     @Mock
-    private JpaProductRepository productRepository;
+    private ProductRepository productRepository;
 
     @Mock
     private ModelMapper modelMapper;
@@ -40,55 +39,49 @@ class ProductServiceImplTest {
 
     @Test
     void testFindById() {
-        var productEntity = new ProductEntity(1L, "Test Product", new BigDecimal("100.00"));
+        var productEntity = new Product(1L, "Test Product", BigDecimal.valueOf(100.0));
         var product = new Product(1L, "Test Product", BigDecimal.valueOf(100.0));
 
-        when(productRepository.findById(1L)).thenReturn(Optional.of(productEntity));
+        when(productRepository.findProductById(1L)).thenReturn(Optional.of(productEntity));
         when(modelMapper.map(productEntity, Product.class)).thenReturn(product);
 
         var result = productService.findById(1L);
 
         assertTrue(result.isPresent());
         assertEquals("Test Product", result.get().getName());
-        verify(productRepository).findById(1L);
+        verify(productRepository).findProductById(1L);
     }
 
     @Test
     void testCreateProduct() {
-        var productEntity = new ProductEntity(1L, "New Product", new BigDecimal("50.00"));
         var product = new Product(null, "New Product", BigDecimal.valueOf(50.0));
+        var savedProductEntity = new Product(1L, "New Product", BigDecimal.valueOf(50.0));
 
-        when(modelMapper.map(product, ProductEntity.class)).thenReturn(productEntity);
-        when(productRepository.save(any(ProductEntity.class))).thenReturn(productEntity);
-        when(modelMapper.map(productEntity, Product.class)).thenReturn(product);
+        when(productRepository.saveProduct(any(Product.class))).thenReturn(savedProductEntity);
+        when(modelMapper.map(product, Product.class)).thenReturn(savedProductEntity);
+        when(modelMapper.map(savedProductEntity, Product.class)).thenReturn(savedProductEntity);
 
         var createdProduct = productService.createProduct(product);
 
         assertNotNull(createdProduct);
         assertEquals("New Product", createdProduct.getName());
-        verify(productRepository).save(any(ProductEntity.class));
+        assertEquals(1L, createdProduct.getId());
+        verify(productRepository).saveProduct(any(Product.class));
     }
 
     @Test
     void testGetAllProducts() {
-        var productEntities = Arrays.asList(
-                new ProductEntity(1L, "Product 1", new BigDecimal("30.00")),
-                new ProductEntity(2L, "Product 2", new BigDecimal("40.00"))
-        );
+        var product1 = new Product(1L, "Product 1", BigDecimal.valueOf(30.0));
+        var product2 = new Product(2L, "Product 2", BigDecimal.valueOf(40.0));
+        var products = Arrays.asList(product1, product2);
 
-        var products = Arrays.asList(
-                new Product(1L, "Product 1", BigDecimal.valueOf(30.0)),
-                new Product(2L, "Product 2", BigDecimal.valueOf(40.0))
-        );
-
-        when(productRepository.findAll()).thenReturn(productEntities);
-        when(modelMapper.map(productEntities.get(0), Product.class)).thenReturn(products.get(0));
-        when(modelMapper.map(productEntities.get(1), Product.class)).thenReturn(products.get(1));
+        when(productRepository.findAllProducts()).thenReturn(products);
 
         var result = productService.getAllProducts();
 
+        assertNotNull(result);
         assertEquals(2, result.size());
-        assertEquals("Product 1", result.get(0).getName());
-        verify(productRepository).findAll();
+
+        verify(productRepository).findAllProducts();
     }
 }

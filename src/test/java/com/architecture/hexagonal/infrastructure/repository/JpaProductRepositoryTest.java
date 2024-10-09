@@ -1,7 +1,6 @@
 package com.architecture.hexagonal.infrastructure.repository;
 
 import com.architecture.hexagonal.domain.Product;
-import com.architecture.hexagonal.infrastructure.entities.ProductEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -34,7 +33,7 @@ class JpaProductRepositoryTest {
         var product = new Product(null, "Test Product", BigDecimal.valueOf(100.0));
         var savedProduct = productRepository.saveProduct(product);
 
-        var retrievedProduct = productRepository.findById(savedProduct.getId());
+        var retrievedProduct = productRepository.findProductById(savedProduct.getId());
         assertTrue(retrievedProduct.isPresent());
         assertEquals("Test Product", retrievedProduct.get().getName());
     }
